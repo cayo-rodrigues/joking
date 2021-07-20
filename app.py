@@ -7,7 +7,7 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from helpers import login_required, find_pic, allowed_file, erase_picture, give_feedback, send_email
+from helpers import login_required, find_pic, allowed_file, erase_picture, give_feedback
 
 
 app = Flask(__name__)
