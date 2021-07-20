@@ -1,0 +1,141 @@
+{% extends 'layout.html' %}
+
+{% block title %} Profile {% endblock %}
+
+{% block main %}
+<script src="/static/rate.js"></script>
+<script src="/static/comment.js"></script>
+<script src="/static/delete_post.js"></script>
+
+    <div class="sheet-like-greenish">
+        <div class="sheet-like container p-5">
+
+            {% include 'flashed_message.html' %}
+
+            {% if session.user_id == user_id %}
+                {% set type='button' %}
+                <script src="/static/my_profile.js"></script>
+            {% endif %}
+            <script src="/static/sort_jokes.js"></script>
+
+            <div class="background">
+                <h3 class="username">{{ username }}</h3>
+                <img class="profile_pic" src="{{ ppic }}" alt="profile_picture" type={{type}}>
+            </div>
+            
+            {% if session.user_id == user_id %}
+                <div class="hidden_form">
+                    <form action="/upload_pic" method="POST" enctype="multipart/form-data">
+                        <input id="ppic_choose" type="file" name="file" accept=".png,.jpg,.jpeg,.gif">
+                        <button id="ppic_upload" type="submit" name="upload">Upload</button>
+                    </form>
+                </div>
+
+                <h3 id="new_pun_heading">What are you pundering about?</h3>
+                <textarea class="new_pun" name="joke" form="post_new_joke" rows="3" autofocus required></textarea>
+                <form action="/profile/{{ username }}" id="post_new_joke" method="POST">
+                    <button type="submit" class="benjamin">Submit</button>
+                </form>
+            {% endif %}
+
+            <hr>
+            <div class="jokes">
+                <h4>
+                    My Jokes 
+                    <span class="sort_by">
+                        <form id="select_sort">
+                            <label for="sort_options">Sort by: </label>
+                            <select id="sort_options" name="order" onchange="sort_jokes(this.value)">
+                                <option selected disabled id="default"></option>
+                                <option value="date_time" name="date_time">Newest</option>
+                                <option value="rating" name="rating">Rating</option>
+                            </select>
+                        </form>
+                    </span>
+                </h4>
+                {% if not user_jokes %}
+                    {% if session.user_id == user_id %}
+                        <p>You have no jokes yet &#128559;</p>
+                    {% else %}
+                        <p>Seems like {{ username }} has no jokes yet &#128559;</p>
+                    {% endif %}
+                {% else %}
+                {% for row in user_jokes %}
+                    <div id="joke_n_{{ row[3] }}" class="post">
+                        <hr>
+                        <p>
+                            <img class="post_pic" src="{{ ppic }}">
+                            <b>{{ username }}</b>
+                            {% if session.user_id == user_id %}
+                                <span class="delete_post" type="button" id="delete_{{ row[3] }}" onclick="confirm_delete(this.id)">&#10006;</span>
+                                <div id="r_u_shure_at_{{ row[3] }}" class="hidden_form r_u_shure">
+                                    <div>
+                                        <h4>Are you shure?</h4>
+                                        <button class="btn-warning" id="yes_at_{{ row[3] }}" onclick="delete_joke()">Yes</button>
+                                        <button class="btn-primary" id="no_at_{{ row[3] }}" onclick="quit_delete()">No</button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </p>
+                        <p><pre class="joke">{{ row[0] }}</pre></p>
+                        <p>
+                            <b class="rating">Rating</b>: <span id="rating_for_{{ row[3] }}">{{ row[1] }}</span>
+                            <!--logic to remember which jokes user has already voted for-->
+                            {% for vote in all_user_votes if session.user_id == vote[0] and row[3] == vote[1] %}
+                                <span id="voted_for_{{ row[3] }}" class="add">&#128076;</span>
+                            {% endfor %}
+                            <span id="voted_for_{{ row[3] }}" class="remove">&#128076;</span>
+                        </p>
+                        <p>
+                            <button id="{{ row[3] }}" class="rate pun_up" name="add">Pun up!</button>
+                            <button id="{{ row[3] }}" class="rate unpun" name="remove">Unpun</button>
+                            <button id="{{ row[3] }}" class="add_comment" title="add a comment!" onclick="show_comment_box(this.id)">&#128172;</button>
+                        </p>
+                        <p>
+                            <div id="comment-box-{{ row[3] }}" class="container p-4 hidden_form">
+                                <textarea id="comment-for-{{ row[3] }}" class="write_comment" rows="2" autofocus required></textarea><br>
+                                <button name="{{ row[3] }}" class="benjamin comment-button" onclick="post_comment(this.name)">Comment</button>
+                            </div>
+                        </p>
+                        <button class="c_comments" id="c-dropdown-at-{{ row[3] }}" name="{{ row[3] }}" onclick="seeComments(this.name)">Show comments</button>                    
+                    </div>
+                    <div class="container p-4 hidden_form comments" id="comments-at-{{ row[3] }}">
+                        {% for comment in comments if comment[2] == row[3] %}
+                            <div class="comment" id="comment_n_{{ comment[4] }}">
+                                <p>
+                                    {% for commenter_id in c_pics if commenter_id == comment[1] %}
+                                        <a href="/profile/{{ comment[3] }}"><img class="comment_pic" src="{{ c_pics[commenter_id] }}"></a>
+                                    {% endfor %}
+                                    <b class="c_username">{{ comment[3] }}</b>
+                                    {% if session.user_id == comment[1] %}
+                                        <span class="delete_post" type="button" id="uncomment_{{ comment[4] }}_{{ row[3] }}" onclick="uncomment(this.id)">&#10006;</span>
+                                    {% endif %}
+                                </p>
+                                <p>
+                                    <pre class="container">{{ comment[0] }}</pre>
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>                    
+            {% endif %}
+            
+            {% if session.user_id == user_id %}
+                <div class="modal-footer" style="margin-top: 10px;">
+                    <table>
+                        <tr><th>Options</th></tr>
+                        <!--
+                        <tr><td onclick="change('username')" type="button">Change username</td></tr>
+                        <tr><td onclick="change('password')" type="button">Change password</td></tr>-->
+                        <tr><td type="button" onclick="r_u_shure()">Delete my account</td></tr>
+                        <tr><td>{{ session.email }}</td></tr>
+                    </table>
+                </div>
+                <div class="pop_up_center hidden_form"></div>
+            {% else %}
+        </div>
+        {% include 'new_post_icon.html' %}
+        {% endif %}
+    </div>
+{% endblock %}

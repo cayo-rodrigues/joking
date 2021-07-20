@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block title %} Recover {% endblock %}
+
+{% block main %}
+
+{% include 'flashed_message.html' %}
+<script src="/static/capsOn.js"></script>
+
+    <form class="left_form" id="registration_form">
+        <h2>Recover your account!</h2>
+        <hr>
+        <div class="form-group">
+            <label>Type here your e-mail adress:</label>
+            <input id="input_email" class="form-control" type="email" autocomplete="off" autofocus placeholder="E-mail" name="email">
+            <p class="feedback" id="email"></p>
+        </div>
+        <p class="caps_feedback"></p>
+        <button onclick="avoid_refresh()" class="benjamin">Next</button>
+    </form>
+    <script>
+    </script>
+{% endblock %}

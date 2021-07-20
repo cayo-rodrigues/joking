@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block title %} Log in {% endblock %}
+
+{% block main %}
+
+{% include 'flashed_message.html' %}
+<script src="/static/capsOn.js"></script>
+
+    <form class="center_form" action="/login" method="POST">
+        <p style='margin-top: 50px; margin-bottom: -55px; margin-left: -150px;'>Sign in just for</p>
+        <img src='/static/images/PHUN_logo.png'>
+        <div class="form-group">
+            <input class="form-control login" type="text" autocomplete="off" autofocus placeholder="Username or e-mail" name="username/email" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control login" type="password" autocomplete="off" placeholder="Password" name="password" required>
+        </div>
+        <div class="form-group">
+            <span class="form-control login caps_feedback hidden_form"></span>
+        </div>
+        <button class="benjamin" type="submit">Log In</button>
+        <p><h6><a href="/register">Don't have an account yet?</a></h6></p>
+        <!--<p><span type="button">&#128561; <a href="/recover">Forgot my password</a> &#128561;</span></p>-->
+    </form>
+{% endblock %}

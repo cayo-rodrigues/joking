@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %} Home {% endblock %}
+{% block main %}
+
+    <div class="jumbotron">
+        <h1>Cool name!</h1>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-9 text">
+                <h2>Title</h2>
+                <p>Sample text</p>
+                {% for i in range(25) %}
+                    <p>Sample texttttttttttttttttttttttttttttttttttttt ttttttttttttttttttttttttttttttttt ttttttttttttttttttttttttttttttttttyyyy yyyyyyyyyyyyyyyy yyyyyyyyyy yyyyykk yyyyyyy yyyyyy</p>
+                {% endfor %}
+            </div>
+            <div class="col side_nav">
+                <i>Instruments</i>
+                <ul>
+                    <a href="/piano" title="Play the 3,14 ano!"><li>Piano</li></a>
+                    <a href="/drums" title="Be drumatic!"><li>Drums</li></a>
+                    <a href="" title="Fartastic!"><li>Farts</li></a>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

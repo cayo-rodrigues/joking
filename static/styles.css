@@ -1,0 +1,409 @@
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+
+.sheet-like {
+    /* vh stands for 'viewport height' */
+    min-height: 100vh;
+    background-color: white;
+    box-shadow: 0px 0px 10px black;   
+}
+.sheet-like-greenish {
+    background-color: rgba(21, 252, 0, 0.144);
+    background-image: url('/static/images/bg_01.jpg');
+    background-attachment: fixed;
+}
+.sheet-like-Newest {
+    background-color: rgb(108, 198, 253);
+    background-image: url('/static/images/bg_00.jpg');
+    background-attachment: fixed;
+}
+.sheet-like-Phuniest {
+    background-color: gold;
+    background-image: url('/static/images/bg_02.jpg');
+    background-attachment: fixed;
+    background-size: contain;
+}
+pre,
+textarea {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+/* pre blocks(jokes and comments) auto line break when in smaller screens */
+pre {
+    white-space: pre-wrap;
+    /* white-space: pre-line would have the same effect, 
+    but trimming white spaces at line begginings too */
+}
+
+
+/* style top navbar */
+.navbar {
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    box-shadow: 0px 3px 7px black;
+    background-color: rgb(50, 50, 50);
+    border: 1px solid black;
+    color: white;
+}
+.logo {
+    margin-right: 10px;
+}
+.logo img {
+    width: 50px;
+    height: 30px;
+    transform: scale(1.8);
+}
+.nav-link {
+    text-decoration: none;
+    color: inherit;
+}
+.nav-link:hover {
+    color: whitesmoke;
+    transform: scale(1.25);
+    text-shadow: 0px 0px 1px white;
+    transition: all 0.2s ease-in-out;
+}
+/* for some reason, without this redundant rotation
+the dropdown icon gets blured */
+#dropdown_icon {
+    transform: rotateX(360deg);
+}
+
+
+/* style forms and their submit buttons */
+form {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.center_form {
+    text-align: center;
+    overflow: hidden;
+}
+.center_form img {
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 250px;
+    height: 150px;
+}
+.left_form {
+    margin: 5%;
+}
+.form-control {
+    display: inline-block;
+}
+.login {
+    width: auto;
+}
+.form-control:focus {
+    border-color: black;
+    box-shadow: 0px 0px 3px black;
+}
+.hidden_form {
+    display: none;
+}
+.benjamin {
+    min-width: 55px;
+    min-height: 40px;
+    border-radius: 8px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+.benjamin:hover,
+.benjamin:focus {
+    transform: scale(1.1);
+    box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.5);
+    text-shadow: 0px 0px 2px white;
+    background-color: rgb(40, 40, 40);
+    transition: all 0.2s ease-in-out;
+}
+.caps_feedback {
+    color: orange;
+    background-color: whitesmoke;
+    border-radius: 10px;
+}
+.verification {
+    width: 150px;
+}
+
+
+/* style the 'Share Upun!' right bottom icon */
+#new_post_text {
+    position: fixed;
+    bottom: 120px;
+    right: 0;
+}
+#new_post_icon {
+    position: fixed;
+    bottom: 33px;
+    right: 5px;
+    width: 90px;
+    height: 90px;
+    border-radius: 100%;
+    box-shadow: 1px 1px 6px black;
+}
+#new_post_icon:hover,
+#new_post_text:hover {
+    transform: scale(1.08);
+    transition: all 0.2s ease-in-out;
+}
+
+
+/* style users profile pages */
+.username {
+    margin-left: 1%;
+}
+.profile_pic {
+    width: 200px;
+    height: 200px;
+    border-radius: 50px;
+    box-shadow: 1px 1px 10px black;
+    background-color: white;
+}
+.background {
+    min-height: 250px;
+    max-height: 300px;
+    border-radius: 15px;
+}
+.new_pun {
+    border-radius: 10px;
+    width: 100%;
+    font-size: large;
+    margin-bottom: 10px;
+}
+#new_pun_heading {
+    margin-top: 10px;
+}
+.sort_by {
+    float: right;
+    text-align: right;
+}
+.modal-footer td:hover {
+    text-decoration: underline;
+}
+
+
+/* style posts pages, including icons, post pictures, jokes and comments */
+.post:hover {
+    border-radius: 20px;
+    background-color: rgb(249, 249, 249);
+}
+.post_pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    box-shadow: -1px 0px 4px black;
+    margin-right: 5px;
+}
+.post_joke {
+    list-style-type: none;
+}
+.joke {
+    font-size: 1rem;
+}
+.delete_post {
+    float: right;
+    color: crimson;
+}
+.delete_post:hover {
+    text-shadow: 0px 0px 1px darkred;
+}
+.r_u_shure {
+    box-shadow: 5px -5px 10px gray;
+    border-radius: 20px;
+    float: right;
+    text-align: right;
+}
+.r_u_shure div {
+    margin: 7px;
+}
+.r_u_shure h4 {
+    margin: 5px;
+}
+.r_u_shure button {
+    border-radius: 10px;
+    margin: 3px;
+}
+.rate {
+    margin-right: 5px;
+    width: 75px;
+    height: 35px;
+    border-radius: 15px;
+}
+.rate:hover {
+    transform: scale(1.15);
+    transition: all 0.1s ease-in-out;
+}
+.pun_up {
+    background-color:rgba(136, 255, 0, 0.384);
+}
+.unpun {
+    background-color:rgba(157, 217, 255, 0.884);
+}
+.add {
+    display: inline-block;
+}
+.remove {
+    display: none;
+}
+.add_comment {
+    border-radius: 10px;
+    background-color: whitesmoke;
+}
+.add_comment:hover {
+    transform: scale(1.2);
+    border-radius: 50px;
+    text-shadow: 0px 0px 2px gray;
+    transition: all 0.1s ease-in-out;
+}
+.write_comment {
+    width: 100%;
+    border-radius: 10px;
+}
+.c_comments {
+    border-radius: 5px;
+}
+.c_username {
+    font-size: 0.88rem;
+}
+.comments {
+    margin-top: 30px;
+    border-radius: 20px;
+    background-color: rgb(240, 240, 240);
+}
+.comment {
+    border-radius: 20px;
+    background-color: rgb(245, 245, 245);
+}
+.comment:hover {
+    background-color: rgb(248, 248, 248);
+}
+.comment_pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    box-shadow: -1px 0px 4px black;
+    margin-right: 5px;
+}
+
+
+.pop_up_center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 0px 600px 600px rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    border: 1px solid gray;
+}
+.confirm_account_delete {
+    color: white;
+    z-index: 1000;
+    text-align: center;
+    margin: 20px;
+}
+.confirm_account_delete button {
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 3px;
+}
+
+
+/* remove a default style from some elements when they're selected and add a soft box-shadow instead */
+button:focus,
+textarea:focus,
+select:focus,
+input:focus {
+    outline: 0;
+    box-shadow: 0px 0px 5px black;
+}
+/* for flask flashed messages */
+.alert {
+    margin: 10px;
+}
+main {
+    overflow-x: hidden;
+}
+main img {
+    /* Constrain images on small screens */
+    max-width: 100%;
+}
+/* when screen width is less than 600px do the following */
+@media screen and (max-width: 600px) 
+{
+    .side_nav {
+        border: none;
+        text-align: center;
+    }
+    .side_nav i {
+        font-size: 1rem;
+        padding: 0;
+        margin-top: 5%;
+    }
+    .side_nav li {
+        text-align: inherit;    
+        font-size: medium;
+    }
+    
+    .profile_pic {
+        width: 100px;
+        height: 100px;
+        border-radius: 30px;
+    }
+    .background {
+        min-height: 150px;
+        max-height: 200px;
+    }
+
+    .new_pun {
+        font-size: medium;
+    }
+    #new_pun_heading {
+        text-shadow: 0px 0px 1px rgb(180, 180, 180);
+        font-size: 1.3rem;
+    }
+    .post_pic {
+        width: 40px;
+        height: 40px;
+    }
+    .comment_pic {
+        width: 30px;
+        height: 30px;
+    }
+
+    #new_post_icon, #new_post_icon:hover {
+        transform: scale(0.6);
+        bottom: 0;
+    }
+    #new_post_text, #new_post_text:hover {
+        transform: scale(0.55);
+        bottom: 45px;
+    }
+
+    .sort_by {
+        font-size: large;
+    }
+
+    .r_u_shure h4 {
+        font-size: 1.3rem;
+    }
+    .r_u_shure button {
+        font-size: 0.9rem;
+    }
+
+    .center_form img {
+        margin-top: 10%;
+        margin-bottom: 10%;
+    }
+}
+
+
+/* how to make a centered pop up, in any screen size */
+/*
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+*/
