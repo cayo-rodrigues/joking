@@ -1,6 +1,4 @@
 import sqlite3, re, os
-import yagmail
-
 from flask import redirect, session
 from functools import wraps
 from decouple import config
@@ -143,13 +141,3 @@ def give_feedback(inputs, flag):
     connection.close()
     
     return feedback
-
-
-def send_email(recipient, subject, email_body):
-
-    yag = yagmail.SMTP(EMAIL_USERNAME, EMAIL_PASSWORD)
-    yag.send(
-        to=recipient,
-        subject=subject,
-        contents=email_body
-    )

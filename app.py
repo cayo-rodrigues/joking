@@ -1,6 +1,4 @@
-#import jyserver.Flask as jsf
 import sqlite3, os
-import random, string
 #import playsound
 from datetime import datetime
 from flask import Flask, render_template, redirect, session, jsonify, request, flash
@@ -326,18 +324,6 @@ def delete_post(stuff):
     # that's how we properly return 'None'
     return ('', 204)
 
-"""
-@app.route('/recover', methods=["GET", "POST"])
-def recover():
-
-    if request.method == 'POST':
-
-        inputs = request.form
-        return redirect('/recover')
-                
-    else:
-        return render_template('recover.html')
-"""
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -449,22 +435,3 @@ def logout():
     session.clear()
     flash("128546 You are logged out".split(" ", 1), "alert-info")
     return redirect("/")
-
-
-@app.route('/email', methods=["POST"])
-def email():
-
-    email = request.form['email']
-
-    verification = ''.join(random.choices(string.ascii_uppercase + string.digits, k=7))
-    print(verification)
-
-    email_body = f"""
-        <p><h2>Welcome, new phuner!</h2></p>
-        <p>Type the verification code below in the registration form to complete your registration proccess and become a joKING!</p>
-        <p><h4>{verification}</h4></p>
-    """
-    subject = 'Confirm e-mail validity'
-
-    send_email(email, subject, email_body)
-    return ('', 204)
