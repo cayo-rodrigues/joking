@@ -1,1 +1,1 @@
-web: gunicorn app:joking
+web: gunicorn app:app
