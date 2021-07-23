@@ -1,2 +1,1 @@
-web: flask run
-release: flask run
+web: gunicorn app:joking
