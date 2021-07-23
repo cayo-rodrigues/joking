@@ -435,3 +435,7 @@ def logout():
     session.clear()
     flash("128546 You are logged out".split(" ", 1), "alert-info")
     return redirect("/")
+
+
+if __name__ == "__main__":
+    app.run()
