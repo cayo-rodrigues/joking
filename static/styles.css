@@ -194,6 +194,9 @@ form {
 
 
 /* style posts pages, including icons, post pictures, jokes and comments */
+.posts-heading {
+    width: 70%;
+}
 .post:hover {
     border-radius: 20px;
     background-color: rgb(249, 249, 249);
@@ -346,6 +349,13 @@ main img {
     /* Constrain images on small screens */
     max-width: 100%;
 }
+@media screen and (max-width: 1024px)
+{
+    #new_post_text,
+    #new_post_icon {
+        display: none;
+    }
+}
 /* when screen width is less than 600px do the following */
 @media screen and (max-width: 600px) 
 {
@@ -373,6 +383,9 @@ main img {
         max-height: 200px;
     }
 
+    .posts-heading {
+        width: 100%;
+    }
     .new_pun {
         font-size: medium;
     }

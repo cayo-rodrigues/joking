@@ -198,13 +198,13 @@ def posts(sort_order):
         order_by = 'date_time'
         messages = {
             'title': 'Newest',
-            'heading': 'Comming right off the oven!'
+            'img': 'Posts_new.png'
         }
     else:
         order_by = 'rating'
         messages = {
             'title': 'Phuniest',
-            'heading': 'The phuntastical ones!'
+            'img': 'Posts_best.png'
         }
 
     connection = sqlite3.connect('phun.db')

@@ -13,7 +13,7 @@
             
             {% include 'flashed_message.html' %}
 
-            <h1>{{ messages['heading'] }}</h1>
+            <div class="posts-heading"><img src="/static/images/{{ messages['img'] }}"></div>
             {% if not all_jokes %}
                 <p><h3>Be the first to phun things up!</h3></p>
             {% else %}
