@@ -25,31 +25,32 @@
         <title>{% block title %}{% endblock %}</title>
     </head>
     <body>
-
-        <nav class="navbar navbar-expand-md sticky-top">
-            <span class="logo"><a class="nav-link" href="/"><img src='/static/images/PHUN_logo.png'></a></span>
-            <button id="dropdown_button" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
-                <span class="navbar-toggler-icon"><img id="dropdown_icon" src="/static/images/icons/dropdown.png" width="100%" height="100%"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                {% if session.user_id %}
-                    <ul class="navbar-nav mr-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/profile/{{ session.username }}">My profile</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/posts/newest">Newest</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/posts/phuniest">Phuniest</a></li>
-                    </ul>
-                    <ul class="navbar-nav ml-auto mt-2">
-                        {% block icon %}{% endblock %}
-                        <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
-                    </ul>
-                {% else %}
-                    <ul class="navbar-nav ml-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/register">Sign up</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/login">Sign in</a></li>
-                    </ul>
-                {% endif %}
-            </div>
-        </nav>
+        {% if session.user_id %}
+            <nav class="navbar navbar-expand-md sticky-top">
+                <span class="logo"><a class="nav-link" href="/"><img src='/static/images/PHUN_logo.png'></a></span>
+                <button id="dropdown_button" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"><img id="dropdown_icon" src="/static/images/icons/dropdown.png" width="100%" height="100%"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    {% if session.user_id %}
+                        <ul class="navbar-nav mr-auto mt-2">
+                            <li class="nav-item"><a class="nav-link" href="/profile/{{ session.username }}">My profile</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/posts/newest">Newest</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/posts/phuniest">Phuniest</a></li>
+                        </ul>
+                        <ul class="navbar-nav ml-auto mt-2">
+                            {% block icon %}{% endblock %}
+                            <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                        </ul>
+                    {% else %}
+                        <ul class="navbar-nav ml-auto mt-2">
+                            <li class="nav-item"><a class="nav-link" href="/register">Sign up</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/login">Sign in</a></li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </nav>
+        {% endif %}
 
         <main>
             {% block main %}{% endblock %}

@@ -1,5 +1,4 @@
 import sqlite3, os
-#import playsound
 from datetime import datetime
 from flask import Flask, render_template, redirect, session, jsonify, request, flash
 from flask_session import Session
@@ -7,7 +6,7 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from helpers import login_required, find_pic, allowed_file, erase_picture, give_feedback
+from helpers import login_required, find_pic, allowed_file, erase_picture, give_feedback, list_to_html
 
 
 app = Flask(__name__)
@@ -60,10 +59,7 @@ def profile(username):
         user_jokes = cursor.execute(f'SELECT joke, rating, user_id, id FROM jokes WHERE user_id = (?) ORDER BY {order} DESC',
                                     [user_id[0]]).fetchall()
         all_user_votes = cursor.execute('SELECT * FROM votes WHERE user_id = ?', [session['user_id']]).fetchall()
-        q = """
-            SELECT * FROM comments WHERE joke_id IN 
-            (SELECT id FROM jokes WHERE user_id = ?)
-        """
+        q = 'SELECT * FROM comments WHERE joke_id IN (SELECT id FROM jokes WHERE user_id = ?)'
         comments = cursor.execute(q, [user_id[0]]).fetchall()
 
         # close connection(.quit)
@@ -79,9 +75,9 @@ def profile(username):
         return render_template("profile.html",
                                 ppic=ppic,
                                 username=username,
-                                user_jokes=user_jokes,
+                                user_jokes=list_to_html(user_jokes),
                                 all_user_votes=all_user_votes,
-                                comments=comments,
+                                comments=list_to_html(comments),
                                 c_pics=c_pics,
                                 user_id=user_id[0])
     else:
@@ -105,8 +101,6 @@ def profile(username):
         connection.commit()
         connection.close()
 
-        """flash some cool message after joke post"""
-        #playsound.playsound(f'{os.getcwd()}/static/sfx/badumtss.mp3', True)
         return redirect('/')
 
 
@@ -149,7 +143,6 @@ def upload_pic():
         erase_picture(find_pic(session['user_id']))        
         # save new picture in the system
         f.save(os.path.join(UPLOAD_FOLDER, f"{session['user_id']}.{ext}"))
-
         return redirect('/')
     else:
         flash('128556 File type not allowed. Profile pictures must be .png, .jpg, .jpeg or .gif'.split(' ', 1), 'alert-warning')
@@ -172,21 +165,19 @@ def rate(vote):
         # ensure users can't vote more than once for a single joke
         if not cursor.execute('SELECT * FROM votes WHERE user_id = (?) AND joke_id = (?)',
                                 [session['user_id'], joke_id]).fetchone():
-            # increase joke's rating
-            cursor.execute('UPDATE jokes SET rating = rating + 1 WHERE id = ?', [joke_id])
-            # remember that user voted for this joke
+            # remember user's vote for this joke
             cursor.execute('INSERT INTO votes (user_id, joke_id) VALUES (?, ?)',
                             [session['user_id'], joke_id])
     else:
         # ensure users can only remove their own votes
         if cursor.execute('SELECT * FROM votes WHERE user_id = (?) AND joke_id = (?)',
                             [session['user_id'], joke_id]).fetchone():
-            # decrease joke's rating
-            cursor.execute('UPDATE jokes SET rating = rating - 1 WHERE id = ?', [joke_id])
             # remove user's vote from this joke
             cursor.execute('DELETE FROM votes WHERE user_id = (?) AND joke_id = (?)',
                             [session['user_id'], joke_id])
-
+    
+    # update votes count
+    cursor.execute('UPDATE jokes SET rating = (SELECT COUNT() FROM votes WHERE joke_id = (?)) WHERE id = (?)', [joke_id, joke_id])
     # get that joke's current rating
     rating = cursor.execute('SELECT rating FROM jokes WHERE id = ?', [joke_id]).fetchone()
 
@@ -232,11 +223,11 @@ def posts(sort_order):
         all_pics[row[0]] = find_pic(row[0])
 
     return render_template('posts.html',
-                           all_jokes=all_jokes,
+                           all_jokes=list_to_html(all_jokes),
                            all_users=all_users,
                            all_user_votes=all_user_votes,
                            all_pics=all_pics,
-                           all_comments=all_comments,
+                           all_comments=list_to_html(all_comments),
                            messages=messages)
 
 
@@ -280,11 +271,10 @@ def delete_post(stuff):
         joke_id = request.form['joke_id']
         cursor.execute('DELETE FROM jokes WHERE id = ?', [joke_id])
 
+        # the joke that user wants to delete may or may not have comments and votes, 
+        # so the try except clause prevents the server from crashing
         try:
             cursor.execute('DELETE FROM comments WHERE joke_id = ?', [joke_id])
-        except:
-            pass
-        try:
             cursor.execute('DELETE FROM votes WHERE joke_id = ?', [joke_id])
         except:
             pass
@@ -296,16 +286,20 @@ def delete_post(stuff):
     
     if stuff == 'account':
 
+        # delete user from the users table and anything else that may exist related to him
         cursor.execute('DELETE FROM users WHERE id = ?', [session['user_id']])
         try:
             cursor.execute('DELETE FROM jokes WHERE user_id = ?', [session['user_id']])
-        except:
-            pass
-        try:
             cursor.execute('DELETE FROM comments WHERE user_id = ?', [session['user_id']])
-        except:
-            pass
-        try:
+
+            # fetchall() returns a list of tupples
+            jokes_ids = cursor.execute(f"SELECT joke_id FROM votes WHERE user_id = {session['user_id']}").fetchall()
+            # so even when iterating over the results, in order to get a 'clean' data 
+            # we must index into the first and only element of each tupple inside the list
+            for joke_id in jokes_ids:
+                cursor.execute("UPDATE jokes SET rating = (SELECT COUNT() FROM votes WHERE user_id != (?) AND joke_id = (?)) WHERE id = (?)",
+                                [session['user_id'], joke_id[0], joke_id[0]])
+                                
             cursor.execute('DELETE FROM votes WHERE user_id = ?', [session['user_id']])
         except:
             pass
@@ -357,7 +351,7 @@ def login():
             query = cursor.execute('SELECT * FROM users WHERE email = ?',
                                     [request.form.get('username/email')]).fetchone()
         if not query or not check_password_hash(query[2], request.form.get('password')):
-            flash('128528 Invalid username or e-mail and/or password'.split(' ', 1), 'alert-danger')
+            flash('128528 Invalid username, e-mail and/or password'.split(' ', 1), 'alert-danger')
             connection.close()
             return redirect('/login')
         
@@ -435,8 +429,3 @@ def logout():
     session.clear()
     flash("128546 You are logged out".split(" ", 1), "alert-info")
     return redirect("/")
-
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0",port=port)

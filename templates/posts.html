@@ -13,14 +13,14 @@
             
             {% include 'flashed_message.html' %}
 
-            <p><h1> {{ messages['heading'] }} </h1></p>
+            <h1>{{ messages['heading'] }}</h1>
             {% if not all_jokes %}
                 <p><h3>Be the first to phun things up!</h3></p>
             {% else %}
                 {% for row in all_jokes %}
                     <hr id="hr_at_{{ row[3] }}">
                     <div id="joke_n_{{ row[3] }}" class="post">
-                        <p>
+                        
                             {% for user in all_users %}
                                 {% if row[2] in user %}
                                     <a href="/profile/{{ user[1] }}"><img class="post_pic" src="{{ all_pics[user[0]] }}"></a>
@@ -37,8 +37,8 @@
                                     </div>
                                 </div>
                             {% endif %}
-                        </p>
-                        <p><pre class="joke">{{ row[0] }}</pre></p>
+                        
+                        <pre class="joke">{{ row[0] | safe }}</pre>
                         <p>
                             <b class="rating">Rating</b>: <span id="rating_for_{{ row[3] }}">{{ row[1] }}</span>
                             {% for vote in all_user_votes if session.user_id == vote[0] and row[3] == vote[1] %}
@@ -51,13 +51,13 @@
                             <button id="{{ row[3] }}" class="rate unpun" name="remove">Unpun</button>
                             <button id="{{ row[3] }}" class="add_comment" title="add a comment!" onclick="show_comment_box(this.id)">&#128172;</button>
                         </p>
-                        <p>
-                            <div id="comment-box-{{ row[3] }}" class="container p-4 hidden_form">
-                                <textarea id="comment-for-{{ row[3] }}" class="write_comment" rows="2" name="comment" autofocus required></textarea>
-                                <button name="{{ row[3] }}" class="benjamin comment-button" onclick="post_comment(this.name)">Comment</button>
-                            </div>
-                        </p>
+                        <div id="comment-box-{{ row[3] }}" class="container p-4 hidden_form">
+                            <textarea id="comment-for-{{ row[3] }}" class="write_comment" rows="2" name="comment" autofocus required></textarea>
+                            <button name="{{ row[3] }}" class="benjamin comment-button" onclick="post_comment(this.name)">Comment</button>
+                        </div>
                         <button class="c_comments" id="c-dropdown-at-{{ row[3] }}" name="{{ row[3] }}" onclick="seeComments(this.name)">Show comments</button>                    
+                    
+                    
                     </div>
                     <div class="container p-4 hidden_form comments" id="comments-at-{{ row[3] }}">
                         {% for comment in all_comments if comment[2] == row[3] %}
@@ -75,10 +75,8 @@
                                         {% endif %}
                                     {% endfor %}
                                 </p>
-                                <p>
-                                    <pre class="container">{{ comment[0] }}</pre>
-                                </p>
-                            </div>
+                                <pre class="container">{{ comment[0] | safe }}</pre>
+                            </div> <!--This /div closes whichever div tag is opened in the if statement above-->
                         {% endfor %}
                     </div>
                 {% endfor %}

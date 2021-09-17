@@ -20,7 +20,7 @@
 
             <div class="background">
                 <h3 class="username">{{ username }}</h3>
-                <img class="profile_pic" src="{{ ppic }}" alt="profile_picture" type={{type}}>
+                <img class="profile_pic" src="{{ ppic }}" alt="profile_picture" type={{ type }} title="Choose a profile picture!">
             </div>
             
             {% if session.user_id == user_id %}
@@ -77,7 +77,7 @@
                                 </div>
                             {% endif %}
                         </p>
-                        <p><pre class="joke">{{ row[0] }}</pre></p>
+                        <pre class="joke">{{ row[0] | safe }}</pre>
                         <p>
                             <b class="rating">Rating</b>: <span id="rating_for_{{ row[3] }}">{{ row[1] }}</span>
                             <!--logic to remember which jokes user has already voted for-->
@@ -91,12 +91,10 @@
                             <button id="{{ row[3] }}" class="rate unpun" name="remove">Unpun</button>
                             <button id="{{ row[3] }}" class="add_comment" title="add a comment!" onclick="show_comment_box(this.id)">&#128172;</button>
                         </p>
-                        <p>
-                            <div id="comment-box-{{ row[3] }}" class="container p-4 hidden_form">
-                                <textarea id="comment-for-{{ row[3] }}" class="write_comment" rows="2" autofocus required></textarea><br>
-                                <button name="{{ row[3] }}" class="benjamin comment-button" onclick="post_comment(this.name)">Comment</button>
-                            </div>
-                        </p>
+                        <div id="comment-box-{{ row[3] }}" class="container p-4 hidden_form">
+                            <textarea id="comment-for-{{ row[3] }}" class="write_comment" rows="2" autofocus required></textarea><br>
+                            <button name="{{ row[3] }}" class="benjamin comment-button" onclick="post_comment(this.name)">Comment</button>
+                        </div>
                         <button class="c_comments" id="c-dropdown-at-{{ row[3] }}" name="{{ row[3] }}" onclick="seeComments(this.name)">Show comments</button>                    
                     </div>
                     <div class="container p-4 hidden_form comments" id="comments-at-{{ row[3] }}">
@@ -112,7 +110,7 @@
                                     {% endif %}
                                 </p>
                                 <p>
-                                    <pre class="container">{{ comment[0] }}</pre>
+                                    <pre class="container">{{ comment[0] | safe }}</pre>
                                 </p>
                             </div>
                         {% endfor %}

@@ -10,17 +10,14 @@ body {
     box-shadow: 0px 0px 10px black;   
 }
 .sheet-like-greenish {
-    background-color: rgba(21, 252, 0, 0.144);
     background-image: url('/static/images/bg_01.jpg');
     background-attachment: fixed;
 }
 .sheet-like-Newest {
-    background-color: rgb(108, 198, 253);
     background-image: url('/static/images/bg_00.jpg');
     background-attachment: fixed;
 }
 .sheet-like-Phuniest {
-    background-color: gold;
     background-image: url('/static/images/bg_02.jpg');
     background-attachment: fixed;
     background-size: contain;
@@ -56,6 +53,7 @@ pre {
 .nav-link {
     text-decoration: none;
     color: inherit;
+    transition: all 0.2s ease-in-out;
 }
 .nav-link:hover {
     color: whitesmoke;
@@ -74,18 +72,29 @@ the dropdown icon gets blured */
 form {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
+.back-to-login {
+    margin: 10px;
+    position: fixed;
+    transition: all 0.2s ease-in-out;
+}
+.back-to-login:hover {
+    transform: scale(1.15);
+    transition: all 0.2s ease-in-out;
+}
 .center_form {
     text-align: center;
     overflow: hidden;
+    padding: 50px 50px 70px 50px;
+    margin: 3vh 28vw 3vh 28vw;
 }
 .center_form img {
-    margin-top: 2%;
-    margin-bottom: 2%;
+    margin-top: 4%;
+    margin-bottom: 5%;
     width: 250px;
     height: 150px;
 }
 .left_form {
-    margin: 5%;
+    margin: 75px 5% 0% 5%;
 }
 .form-control {
     display: inline-block;
@@ -106,6 +115,7 @@ form {
     border-radius: 8px;
     color: white;
     background-color: rgba(0, 0, 0, 0.75);
+    transition: all 0.2s ease-in-out;
 }
 .benjamin:hover,
 .benjamin:focus {
@@ -130,6 +140,7 @@ form {
     position: fixed;
     bottom: 120px;
     right: 0;
+    transition: all 0.2s ease-in-out;
 }
 #new_post_icon {
     position: fixed;
@@ -139,6 +150,7 @@ form {
     height: 90px;
     border-radius: 100%;
     box-shadow: 1px 1px 6px black;
+    transition: all 0.2s ease-in-out;
 }
 #new_post_icon:hover,
 #new_post_text:hover {
@@ -207,7 +219,7 @@ form {
     text-shadow: 0px 0px 1px darkred;
 }
 .r_u_shure {
-    box-shadow: 5px -5px 10px gray;
+    box-shadow: 5px -5px 10px lightgray;
     border-radius: 20px;
     float: right;
     text-align: right;
@@ -227,6 +239,7 @@ form {
     width: 75px;
     height: 35px;
     border-radius: 15px;
+    transition: all 0.1s ease-in-out;
 }
 .rate:hover {
     transform: scale(1.15);
@@ -247,6 +260,7 @@ form {
 .add_comment {
     border-radius: 10px;
     background-color: whitesmoke;
+    transition: all 0.1s ease-in-out;
 }
 .add_comment:hover {
     transform: scale(1.2);
@@ -320,7 +334,10 @@ input:focus {
 }
 /* for flask flashed messages */
 .alert {
-    margin: 10px;
+    margin: 10px 10px 0px 10px;
+    left: 0;
+    right: 0;
+    position: fixed;
 }
 main {
     overflow-x: hidden;
@@ -392,9 +409,20 @@ main img {
         font-size: 0.9rem;
     }
 
+    .center_form {    
+        padding: 0;
+        margin: 0;
+        border-radius: initial;
+        box-shadow: none;
+    }
     .center_form img {
         margin-top: 10%;
         margin-bottom: 10%;
+    }
+
+    .alert {
+        margin: 10px 10px 0px 10px;
+        position: relative;
     }
 }
 

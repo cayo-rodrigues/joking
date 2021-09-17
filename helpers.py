@@ -1,4 +1,5 @@
 import sqlite3, re, os
+from markdown2 import markdown
 from flask import redirect, session
 from functools import wraps
 from decouple import config
@@ -52,6 +53,13 @@ def erase_picture(picture):
     # if user's current profile pic is not the default pic
     if picture != f"{PATH.split('Phun')[1]}default.jpg":
         os.remove(os.path.join(PATH, picture.split('profile_pics/', 1)[1]))
+
+
+def list_to_html(l):
+    for i in range(len(l)):
+        l[i] = list(l[i])
+        l[i][0] = markdown(l[i][0])
+    return l
 
 
 def give_feedback(inputs, flag):

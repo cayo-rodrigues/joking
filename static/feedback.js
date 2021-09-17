@@ -92,10 +92,11 @@ function give_feedback(inputs)
         }
     });
 }
-
+/*
 function send_email(email)
 {
     $.post('/email', email, () => {
         console.log("Please enter the verification code we've sent to your email");
     });
 }
+*/
