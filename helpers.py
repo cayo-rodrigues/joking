@@ -9,7 +9,6 @@ from validate_email import validate_email
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 PATH = f"{os.getcwd()}/static/images/profile_pics/"
 EMAIL_USERNAME = config('USER')
-EMAIL_PASSWORD = config('PASSWORD')
 
 
 def login_required(f):
