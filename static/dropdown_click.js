@@ -27,9 +27,12 @@ document.addEventListener('DOMContentLoaded', function()
         }       
     });
 });
-// this would achieve the same results:
-    //button.style.transform = 'rotateX(180deg)';
-    //button.style.transition = 'all 0.2s ease-in-out';
-// but we'd have to run a 
-    //button = document.querySelector('#dropdown_button');
-// first of course
+
+/* this would achieve the same results: */
+
+    // button.style.transform = 'rotateX(180deg)';
+    // button.style.transition = 'all 0.2s ease-in-out';
+
+/* but we'd have to run a: */
+    // button = document.querySelector('#dropdown_button');
+/* first of course */

@@ -5,9 +5,6 @@
         <!-- responsive window size -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- https://favicon.io/emoji-favicons/musical-score -->
-        <!--<link href="/static/favicon.ico" rel="icon">-->
-
         <!-- idk why, but it works -->
         <link rel="icon" type="image/png" href="/static/images/icons/favicon.png"/>
 
@@ -26,6 +23,7 @@
     </head>
     <body>
         {% if session.user_id %}
+            <!--The credits for this responsive navbar go all for the amazing CS50 staff, who made the distribution code for Problem Set 9, Finance-->
             <nav class="navbar navbar-expand-md sticky-top">
                 <span class="logo"><a class="nav-link" href="/"><img src='/static/images/PHUN_logo.png'></a></span>
                 <button id="dropdown_button" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">

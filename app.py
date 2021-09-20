@@ -6,12 +6,10 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from helpers import login_required, find_pic, allowed_file, erase_picture, give_feedback, list_to_html
+from helpers import login_required, find_pic, allowed_file, erase_picture, give_feedback, list_to_html, UPLOAD_FOLDER
 
 
 app = Flask(__name__)
-
-UPLOAD_FOLDER = f"{os.getcwd()}/static/images/profile_pics/"
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024  # limit uploads size to 8MB
@@ -31,9 +29,11 @@ Session(app)
 
 
 @app.route('/')
-@login_required
 def index():
-    return redirect(f"/profile/{session['username']}")
+    try:
+        return redirect(f"/profile/{session['username']}")
+    except:
+        return redirect("/login")
 
 
 @app.route("/profile/<username>", methods=["GET", "POST"])
@@ -84,7 +84,7 @@ def profile(username):
         # ensure user inputs a joke
         joke = request.form.get('joke')
         if not joke or joke.strip() == '':
-            flash('128540 Was that supposed to be a joke?'.split(" ", 1), 'alert-info')
+            flash('&#128540; Was that supposed to be a joke? &#128540;', 'alert-info')
             return redirect("/")
         
         # get current date and time
@@ -111,7 +111,7 @@ def sort(order):
 
     # storing value in session seemed better than displaying it in the url
     session['order'] = order
-    #return redirect(f'/profile/{username}')
+    #return None
     return ('', 204)
 
 
@@ -122,18 +122,17 @@ def upload_pic():
     
     # check if the post request has the file part
     if 'file' not in request.files:
-        flash('128533 Something went wrong with the request, please try again'.split(' ', 1), 'alert-info')
+        flash('&#128533; Something went wrong with the request, please try again &#128533;', 'alert-info')
         return redirect('/')
     f = request.files['file']
 
     # if user does not select file, browser also submit an empty part without filename
     if f.filename == '':
-        flash('128528 No selected file'.split(' ', 1), 'alert-info')
+        flash('&#128528; No selected file &#128528;', 'alert-info')
         return redirect('/')
 
     # ensure user inputs an allowed file type
     if allowed_file(f.filename):
-
         # use secure_filename() to protect against malicious filenames, that could mess everything up
         filename = secure_filename(f.filename)
         # get the file extension
@@ -145,7 +144,7 @@ def upload_pic():
         f.save(os.path.join(UPLOAD_FOLDER, f"{session['user_id']}.{ext}"))
         return redirect('/')
     else:
-        flash('128556 File type not allowed. Profile pictures must be .png, .jpg, .jpeg or .gif'.split(' ', 1), 'alert-warning')
+        flash('&#128556; File type not allowed. Profile pictures must be .png, .jpg, .jpeg or .gif &#128556;', 'alert-warning')
         return redirect('/')
 
 
@@ -234,6 +233,7 @@ def posts(sort_order):
 @app.route('/comment/<joke_id>', methods=["POST"])
 @login_required
 def comment(joke_id):
+    """Add comment to a joke"""
 
     comment = request.form['comment']
     
@@ -309,7 +309,7 @@ def delete_post(stuff):
 
         erase_picture(find_pic(session['user_id']))
         session.clear()
-        flash("128557 Baby please don't go".split(' ', 1), 'alert-info')
+        flash("&#128557; Baby please don't go &#128557;", 'alert-info')
         return redirect('/login')
 
     connection.commit()
@@ -323,7 +323,6 @@ def delete_post(stuff):
 def login():
     """Log user in"""
 
-    #session.clear()
     # Forget user id and any other information stored in session, but keep flashed messages
     for key in session.keys():
         if key != '_flashes':
@@ -335,10 +334,10 @@ def login():
     if request.method == 'POST':
 
         if not request.form.get('username/email'):
-            flash("128529 Missing username or e-mail".split(" ", 1), "alert-danger")
+            flash("&#128529; Missing username or e-mail &#128529;", "alert-danger")
             return redirect("/login")
         if not request.form.get('password'):
-            flash("128529 Missing password".split(" ", 1), "alert-danger")
+            flash("&#128529; Missing password &#128529", "alert-danger")
             return redirect("/login")
 
         connection = sqlite3.connect('phun.db')
@@ -351,7 +350,7 @@ def login():
             query = cursor.execute('SELECT * FROM users WHERE email = ?',
                                     [request.form.get('username/email')]).fetchone()
         if not query or not check_password_hash(query[2], request.form.get('password')):
-            flash('128528 Invalid username, e-mail and/or password'.split(' ', 1), 'alert-danger')
+            flash('&#128528; Invalid username, e-mail and/or password &#128528;', 'alert-danger')
             connection.close()
             return redirect('/login')
         
@@ -373,34 +372,18 @@ def register():
     if request.method == "POST":
 
         inputs = request.form
+        # cool one line if else statement
+        all = True if len(inputs) == 4 else False
+        feedback = give_feedback(inputs, inputs.keys(), all)
 
-        if len(inputs) <= 2:
-            try:
-                inputs['username']
-                flag = 'username'
-            except:
-                try:
-                    inputs['password']
-                    inputs['confirmation']
-                    flag = 'password and confirmation'
-                except:
-                    flag = 'email'
-        else:
-            flag = 'all'        
-
-        #for key in inputs.keys():
-            #print(key)
-
-        feedback = give_feedback(inputs, flag)
-
+        # that is, if not all inputs are valid
         for key in feedback:
             if feedback[key] != '&#129303; Perfect &#129303;':
                 return jsonify(feedback)
 
-        if flag != 'all':
+        # that is, if user is not submitting the whole form
+        if all:
             return jsonify(feedback)
-
-        # if there's no user registered with that username yet, and we made it through here, then we can properlly register the user
 
         # never store plaintext password
         password = generate_password_hash(inputs['password'])
@@ -414,7 +397,7 @@ def register():
         connection.commit()
         connection.close()
         
-        flash("128526 Registration succesfull!".split(" ", 1), "alert-success")
+        flash("&#128526; Registration succesfull! &#128526;", "alert-success")
         return jsonify('200 OK')
 
     else:
@@ -427,5 +410,5 @@ def logout():
 
     # forget any information stored in session
     session.clear()
-    flash("128546 You are logged out".split(" ", 1), "alert-info")
+    flash("&#128546; You are logged out &#128546;", "alert-info")
     return redirect("/")

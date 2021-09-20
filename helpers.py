@@ -1,4 +1,5 @@
 import sqlite3, re, os
+from sys import flags
 from markdown2 import markdown
 from flask import redirect, session
 from functools import wraps
@@ -7,10 +8,11 @@ from validate_email import validate_email
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-PATH = f"{os.getcwd()}/static/images/profile_pics/"
+UPLOAD_FOLDER = f"{os.getcwd()}/static/images/profile_pics/"
 EMAIL_USERNAME = config('USER')
 
 
+# From CS50 staff
 def login_required(f):
     """
     Decorate routes to require login.
@@ -26,22 +28,25 @@ def login_required(f):
 
 
 def find_pic(user_id):
+    """Look for users profile pictures and return their path"""
     for ext in ALLOWED_EXTENSIONS:
         try:
-            with open(f'{PATH}{user_id}.{ext}') as pic:
+            with open(f'{UPLOAD_FOLDER}{user_id}.{ext}') as pic:
                 return pic.name.split('Phun', 1)[1]
         except:
             pass
-    return f'{PATH}default.jpg'.split('Phun', 1)[1]
+    return f'{UPLOAD_FOLDER}default.jpg'.split('Phun', 1)[1]
 
 
 def allowed_file(filename):
+    """Ensure the uploaded picture is either a gif, jpg or png file"""
     if filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
         return True
     return False
 
 
-def check_key(dictionary, key):      
+def check_key(dictionary, key):
+    """Check if a given dictionary has a certain key"""
     if key in dictionary.keys():
         return True
     else:
@@ -49,31 +54,37 @@ def check_key(dictionary, key):
 
 
 def erase_picture(picture):
+    """Erase a profile picture"""
     # if user's current profile pic is not the default pic
-    if picture != f"{PATH.split('Phun')[1]}default.jpg":
-        os.remove(os.path.join(PATH, picture.split('profile_pics/', 1)[1]))
+    if picture != f"{UPLOAD_FOLDER.split('Phun')[1]}default.jpg":
+        os.remove(os.UPLOAD_FOLDER.join(UPLOAD_FOLDER, picture.split('profile_pics/', 1)[1]))
 
 
 def list_to_html(l):
+    """Converts a list of tupples from markdown to html"""
     for i in range(len(l)):
         l[i] = list(l[i])
         l[i][0] = markdown(l[i][0])
     return l
 
 
-def give_feedback(inputs, flag):
-
-    # ensure correct input and give corresponding feedback 
+def give_feedback(inputs, flags, all=False):
+    """
+    Ensure correct input and give dinamic feedback 
+    to user when filling the registration form
+    """
     feedback = {}
 
     connection = sqlite3.connect('phun.db')
     cursor = connection.cursor()
 
-    if flag == 'username' or flag == 'all':
+    # the flags represent which fields the feedback should be given to
+    if 'username' in flags or all:
 
         if not inputs['username']:
             feedback['username'] = "&#128551; Missing username &#128551;"        
         
+        # that is, if there is no feedback for the username field yet
         if not check_key(feedback, 'username'):
             # re.findall returns a list with all matching characters
             special_characters = re.findall(r"[\\/=&? ]", inputs['username'])
@@ -86,7 +97,7 @@ def give_feedback(inputs, flag):
             connection.close()
             feedback['username'] = '&#128556; Username already exists &#128556;'
 
-    if flag == 'password and confirmation' or flag == 'all':
+    if 'password' in flags or 'confirmation' in flags or all:
 
         if not inputs['password']:
             feedback['password'] = "&#128551; Missing password &#128551;"
@@ -115,17 +126,17 @@ def give_feedback(inputs, flag):
             if inputs['confirmation'] != inputs['password']:
                 feedback['confirmation'] = "&#128558; Passwords did not match &#128558;"
 
-    if flag == 'email' or flag == 'all':
+    if 'email' in flags or all:
 
         if not inputs['email']:
             feedback['email'] = '&#128551; Missing e-mail &#128551;'
         
         if not check_key(feedback, 'email'):
-            already_exists = cursor.execute('SELECT email FROM users WHERE email = ?',
-                                            [inputs['email']]).fetchone()
+            already_exists = cursor.execute('SELECT email FROM users WHERE email = ?', [inputs['email']]).fetchone()
             if already_exists:
                 feedback['email'] = '&#128556; E-mail already in use &#128556;'
 
+        # yes, checking the same condition again, to avoid two feedback beeing given at once
         if not check_key(feedback, 'email'):
             is_valid = validate_email(email_address=inputs['email'],
                                       check_format=True,
@@ -139,12 +150,12 @@ def give_feedback(inputs, flag):
                                       smtp_debug=False)
             if not is_valid:
                 feedback['email'] = '&#128558; Invalid e-mail adress &#128558;'
-            
 
+    # if any of the inputs provided has not yet been added to the feedback dict,
+    # it means that no problems were found and we can return a positive feedback
     for key in inputs:
         if not check_key(feedback, key):
             feedback[key] = '&#129303; Perfect &#129303;'
     
-    connection.close()
-    
+    connection.close()    
     return feedback

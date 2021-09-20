@@ -6,12 +6,12 @@ $(document).ready(() => {
         joke_id = event.target.id;
         // is the user voting or unvoting?
         vote = event.target.name;
-        
+
         // send ajax post request to server and get the joke's updated rating back
         $.post(`/rate/${joke_id},${vote}`, (rating) => {
             // visually update joke's rating count
             document.querySelector(`#rating_for_${joke_id}`).innerHTML = rating;
-
+            
             // display icon to let user know he has already voted for that joke
             if (vote == 'add') {
                 $(`#voted_for_${joke_id}`).removeClass();

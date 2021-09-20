@@ -1,5 +1,8 @@
+` Give dinamic feedback to users when their filling the registration form `
+
 $(document).ready(() => {
 
+    // key pressess to be ignored when giving feedback
     ignore = [
         'Enter', 'Tab', 'CapsLock', 'Shift', 'Control', 'Alt', 
         'Meta', 'Escape', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 
@@ -9,15 +12,18 @@ $(document).ready(() => {
         'F10', 'F11', 'F12'
     ];
 
+    // select all html elements with the 'auto-feedback' class and run a function for each one of them
     document.querySelectorAll('.auto-feedback').forEach(function(f)
     {
-        f.addEventListener('keyup', (event) => {            
+        // 'f' corresponds to each input 'field'
+        f.addEventListener('keyup', (event) => {
+            // when user presses a key that is not to be ignored into some of the input fields
             if (!ignore.includes(event.key))
             {
                 inputs = {};
+                // 'f.name' identifies which field the user is filling, and 'f.value' is what is in it so far
                 inputs[f.name] = f.value;
-                // send to server both password and confirmation together
-                // to avoid 400 bad request
+                // send to server both password and confirmation together to avoid 400 bad request
                 if (f.name == 'confirmation')
                 {
                     inputs['password'] = document.querySelector('#input_password').value;
@@ -26,12 +32,14 @@ $(document).ready(() => {
                 {
                     inputs['confirmation'] = document.querySelector('#input_confirmation').value;
                 }
+                // let another function do the actual feedback using the info we gattered
                 give_feedback(inputs);
             }
         });
     });
 });
 
+/* Prevents page from refreshing when form is submitted */
 function avoid_refresh(step)
 {
     $('#registration_form').submit((event) => {
@@ -43,10 +51,12 @@ function avoid_refresh(step)
     });
 }
 
+/* this function may be called in two ways: via form submittion or key input,
+    so the 'inputs' argument is optional. */
 function give_feedback(inputs)
 {
     inputs = inputs || 0;
-
+    // if form is beeing submitted, then get all the user input from all fields
     if (inputs == 0)
     {
         fields = document.getElementsByClassName('form-control');
@@ -56,21 +66,24 @@ function give_feedback(inputs)
             inputs[fields[i].name] = fields[i].value;
         }
     }
-
+    // send ajax post request to server, passing in the user inputs as data
     $.post('/register', inputs, (feedback) => {
-
         if (feedback == '200 OK')
         {
-            //send_email(inputs['email']);
+            // if the user has been succesfully registred, redirect him/her to the login page
             return window.location.replace("/login");
         }
         
+        // loop through all feedback messages received from the server
         for (let i in feedback)
         {
+            // display each message below in its corresponding input field
             $(`#${i}`).html(feedback[i]);
-                        
+            
+            // style messages and input fields according to the feedback
             if (feedback[i] != '&#129303; Perfect &#129303;')
             {
+                // red for negative
                 $(`#${i}`).css({
                     'color': 'rgb(92,0,0)'
                 });
@@ -81,6 +94,7 @@ function give_feedback(inputs)
             }
             else
             {
+                // green for positive
                 $(`#${i}`).css({
                     'color': 'rgb(0,92,0)'
                 });
@@ -92,11 +106,3 @@ function give_feedback(inputs)
         }
     });
 }
-/*
-function send_email(email)
-{
-    $.post('/email', email, () => {
-        console.log("Please enter the verification code we've sent to your email");
-    });
-}
-*/

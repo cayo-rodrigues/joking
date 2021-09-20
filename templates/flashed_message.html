@@ -2,7 +2,7 @@
     {% if message %}                
         <header>
             <div class="alert {{ message[0][0] }} border text-center" role="alert">
-                <h4>&#{{ message[0][1][0] }}; {{ message[0][1][1] }} &#{{ message[0][1][0] }};</h4>
+                <h4>{{ message[0][1] | safe }}</h4>
             </div>
         </header>
     {% endif %}
