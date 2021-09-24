@@ -32,7 +32,7 @@
                 </div>
 
                 <h3 id="new_pun_heading">What are you pundering about?</h3>
-                <textarea class="new_pun" name="joke" form="post_new_joke" rows="3" autofocus required></textarea>
+                <textarea class="new_pun" name="joke" form="post_new_joke" rows="3" placeholder="Feel free to use Markdown syntax" autofocus required></textarea>
                 <form action="/profile/{{ username }}" id="post_new_joke" method="POST">
                     <button type="submit" class="benjamin">Submit</button>
                 </form>
@@ -133,7 +133,6 @@
                 <div class="pop_up_center hidden_form"></div>
             {% else %}
         </div>
-        {% include 'new_post_icon.html' %}
         {% endif %}
     </div>
 {% endblock %}

@@ -24,7 +24,7 @@ body {
 }
 pre,
 textarea {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'FantasqueSansMono Nerd Font';
 }
 /* pre blocks(jokes and comments) auto line break when in smaller screens */
 pre {
@@ -132,30 +132,6 @@ form {
 }
 .verification {
     width: 150px;
-}
-
-
-/* style the 'Share Upun!' right bottom icon */
-#new_post_text {
-    position: fixed;
-    bottom: 120px;
-    right: 0;
-    transition: all 0.2s ease-in-out;
-}
-#new_post_icon {
-    position: fixed;
-    bottom: 33px;
-    right: 5px;
-    width: 90px;
-    height: 90px;
-    border-radius: 100%;
-    box-shadow: 1px 1px 6px black;
-    transition: all 0.2s ease-in-out;
-}
-#new_post_icon:hover,
-#new_post_text:hover {
-    transform: scale(1.08);
-    transition: all 0.2s ease-in-out;
 }
 
 
@@ -438,13 +414,3 @@ main img {
         position: relative;
     }
 }
-
-
-/* how to make a centered pop up, in any screen size */
-/*
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-*/

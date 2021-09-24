@@ -52,7 +52,7 @@
                             <button id="{{ row[3] }}" class="add_comment" title="add a comment!" onclick="show_comment_box(this.id)">&#128172;</button>
                         </p>
                         <div id="comment-box-{{ row[3] }}" class="container p-4 hidden_form">
-                            <textarea id="comment-for-{{ row[3] }}" class="write_comment" rows="2" name="comment" autofocus required></textarea>
+                            <textarea id="comment-for-{{ row[3] }}" class="write_comment" rows="2" name="comment" placeholder="Feel free to use Markdown syntax" autofocus required></textarea>
                             <button name="{{ row[3] }}" class="benjamin comment-button" onclick="post_comment(this.name)">Comment</button>
                         </div>
                         <button class="c_comments" id="c-dropdown-at-{{ row[3] }}" name="{{ row[3] }}" onclick="seeComments(this.name)">Show comments</button>                    
@@ -83,5 +83,4 @@
             {% endif %}
         </div>
     </div>
-    {% include 'new_post_icon.html' %}
 {% endblock %}

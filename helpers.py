@@ -57,7 +57,7 @@ def erase_picture(picture):
     """Erase a profile picture"""
     # if user's current profile pic is not the default pic
     if picture != f"{UPLOAD_FOLDER.split('Phun')[1]}default.jpg":
-        os.remove(os.UPLOAD_FOLDER.join(UPLOAD_FOLDER, picture.split('profile_pics/', 1)[1]))
+        os.remove(os.path.join(UPLOAD_FOLDER, picture.split('profile_pics/', 1)[1]))
 
 
 def list_to_html(l):

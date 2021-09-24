@@ -1,6 +1,6 @@
 // when document is ready, that is, when page is fully loaded
 $(document).ready(() => {
-    // listen for clicks on any rating buttons
+    // listen for clicks on any rating button
     $('.rate').click((event) => {
         // which joke is this?
         joke_id = event.target.id;

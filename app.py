@@ -382,7 +382,7 @@ def register():
                 return jsonify(feedback)
 
         # that is, if user is not submitting the whole form
-        if all:
+        if not all:
             return jsonify(feedback)
 
         # never store plaintext password

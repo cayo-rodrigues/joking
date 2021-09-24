@@ -32,9 +32,9 @@ function seeComments(joke_id)
     }
 }
 
+/* handle logic for submiting a comment related to a given joke to the server */
 function post_comment(joke_id)
 {
-    // handle logic for submiting a comment related to a given joke to the server
     nc_message = document.querySelector(`#no_comments_at_${joke_id}`);
     if (nc_message)
     {

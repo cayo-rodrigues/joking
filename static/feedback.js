@@ -1,4 +1,4 @@
-` Give dinamic feedback to users when their filling the registration form `
+` Give dynamic feedback to users when they're filling the registration form `
 
 $(document).ready(() => {
 
@@ -32,7 +32,7 @@ $(document).ready(() => {
                 {
                     inputs['confirmation'] = document.querySelector('#input_confirmation').value;
                 }
-                // let another function do the actual feedback using the info we gattered
+                // let another function do the actual feedback using the info we gathered
                 give_feedback(inputs);
             }
         });
@@ -51,12 +51,12 @@ function avoid_refresh(step)
     });
 }
 
-/* this function may be called in two ways: via form submittion or key input,
+/* this function may be called in two ways: via form submission or key input,
     so the 'inputs' argument is optional. */
 function give_feedback(inputs)
 {
     inputs = inputs || 0;
-    // if form is beeing submitted, then get all the user input from all fields
+    // if form is being submitted, then get all the user input from all fields
     if (inputs == 0)
     {
         fields = document.getElementsByClassName('form-control');

@@ -1,4 +1,4 @@
-` Handle joke deletion `
+` Handle joke and comment deletion `
 
 function confirm_delete(id)
 {
@@ -28,7 +28,7 @@ function delete_joke()
 
 function quit_delete()
 {
-    // if user clicks 'no' or the 'x' button again, the deletion confirmation message desapears
+    // if user clicks 'no' or the 'x' button again, the deletion confirmation message disappears
     $('#r_u_shure_at_' + joke_id['joke_id']).toggleClass('hidden_form');
 }
 
