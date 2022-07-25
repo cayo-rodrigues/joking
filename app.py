@@ -1,18 +1,21 @@
-import sqlite3, os
+import os
+import sqlite3
 from datetime import datetime
-from flask import Flask, render_template, redirect, session, jsonify, request, flash
-from flask_session import Session
 from tempfile import mkdtemp
+
+from flask import (Flask, flash, jsonify, redirect, render_template, request,
+                   session)
+from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from helpers import login_required, find_pic, allowed_file, erase_picture, give_feedback, list_to_html, UPLOAD_FOLDER
-
+from helpers import (UPLOAD_FOLDER, allowed_file, erase_picture, find_pic,
+                     give_feedback, list_to_html, login_required)
 
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024  # limit uploads size to 8MB
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # limit uploads size to 5MB
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 @app.after_request
@@ -64,14 +67,14 @@ def profile(username):
 
         # close connection(.quit)
         connection.close()
-        
+
         # look for the user's profile pic
         ppic = find_pic(user_id[0])
         # get commenters profile pictures
         c_pics = {}
         for row in comments:
             c_pics[row[1]] = find_pic(row[1])
-        
+
         return render_template("profile.html",
                                 ppic=ppic,
                                 username=username,
@@ -86,7 +89,7 @@ def profile(username):
         if not joke or joke.strip() == '':
             flash('&#128540; Was that supposed to be a joke? &#128540;', 'alert-info')
             return redirect("/")
-        
+
         # get current date and time
         now = datetime.now()
 
@@ -119,7 +122,7 @@ def sort(order):
 @login_required
 def upload_pic():
     """Handle picture uploads"""
-    
+
     # check if the post request has the file part
     if 'file' not in request.files:
         flash('&#128533; Something went wrong with the request, please try again &#128533;', 'alert-info')
@@ -139,7 +142,7 @@ def upload_pic():
         ext = filename.rsplit('.', 1)[1].lower()
 
         # erase user's former picture, if there is one
-        erase_picture(find_pic(session['user_id']))        
+        erase_picture(find_pic(session['user_id']))
         # save new picture in the system
         f.save(os.path.join(UPLOAD_FOLDER, f"{session['user_id']}.{ext}"))
         return redirect('/')
@@ -152,7 +155,7 @@ def upload_pic():
 @login_required
 def rate(vote):
     """Handle joke voting"""
-    
+
     connection = sqlite3.connect('phun.db')
     cursor = connection.cursor()
 
@@ -174,7 +177,7 @@ def rate(vote):
             # remove user's vote from this joke
             cursor.execute('DELETE FROM votes WHERE user_id = (?) AND joke_id = (?)',
                             [session['user_id'], joke_id])
-    
+
     # update votes count
     cursor.execute('UPDATE jokes SET rating = (SELECT COUNT() FROM votes WHERE joke_id = (?)) WHERE id = (?)', [joke_id, joke_id])
     # get that joke's current rating
@@ -236,7 +239,7 @@ def comment(joke_id):
     """Add comment to a joke"""
 
     comment = request.form['comment']
-    
+
     # add comment to database
     connection = sqlite3.connect('phun.db')
     cursor = connection.cursor()
@@ -262,16 +265,16 @@ def comment(joke_id):
 @app.route('/delete/<stuff>', methods=["POST"])
 @login_required
 def delete_post(stuff):
-    
+
     connection = sqlite3.connect('phun.db')
     cursor = connection.cursor()
 
     if stuff == 'joke':
-        
+
         joke_id = request.form['joke_id']
         cursor.execute('DELETE FROM jokes WHERE id = ?', [joke_id])
 
-        # the joke that user wants to delete may or may not have comments and votes, 
+        # the joke that user wants to delete may or may not have comments and votes,
         # so the try except clause prevents the server from crashing
         try:
             cursor.execute('DELETE FROM comments WHERE joke_id = ?', [joke_id])
@@ -283,7 +286,7 @@ def delete_post(stuff):
 
         comment_id = request.form['comment_id']
         cursor.execute('DELETE FROM comments WHERE comment_id = ?', [comment_id])
-    
+
     if stuff == 'account':
 
         # delete user from the users table and anything else that may exist related to him
@@ -294,12 +297,12 @@ def delete_post(stuff):
 
             # fetchall() returns a list of tupples
             jokes_ids = cursor.execute(f"SELECT joke_id FROM votes WHERE user_id = {session['user_id']}").fetchall()
-            # so even when iterating over the results, in order to get a 'clean' data 
+            # so even when iterating over the results, in order to get a 'clean' data
             # we must index into the first and only element of each tupple inside the list
             for joke_id in jokes_ids:
                 cursor.execute("UPDATE jokes SET rating = (SELECT COUNT() FROM votes WHERE user_id != (?) AND joke_id = (?)) WHERE id = (?)",
                                 [session['user_id'], joke_id[0], joke_id[0]])
-                                
+
             cursor.execute('DELETE FROM votes WHERE user_id = ?', [session['user_id']])
         except:
             pass
@@ -327,7 +330,7 @@ def login():
     for key in session.keys():
         if key != '_flashes':
             session.pop(key)
-    
+
     # this would do exactly the same as the above:
         # [session.pop(key) for key in list(session.keys()) if key != '_flashes']
 
@@ -353,7 +356,7 @@ def login():
             flash('&#128528; Invalid username, e-mail and/or password &#128528;', 'alert-danger')
             connection.close()
             return redirect('/login')
-        
+
         # remember which user has logged in
         session["user_id"] = query[0]
         session['username'] = query[1]
@@ -391,12 +394,12 @@ def register():
         connection = sqlite3.connect('phun.db')
         cursor = connection.cursor()
 
-        cursor.execute("INSERT INTO users (username, hash, email) VALUES (?, ?, ?)", 
+        cursor.execute("INSERT INTO users (username, hash, email) VALUES (?, ?, ?)",
                         [inputs['username'], password, inputs['email'],])
-        
+
         connection.commit()
         connection.close()
-        
+
         flash("&#128526; Registration succesfull! &#128526;", "alert-success")
         return jsonify('200 OK')
 

@@ -1,11 +1,11 @@
-import sqlite3, re, os
-from sys import flags
-from markdown2 import markdown
-from flask import redirect, session
+import os
+import re
+import sqlite3
 from functools import wraps
-from decouple import config
-from validate_email import validate_email
 
+from decouple import config
+from flask import redirect, session
+from markdown2 import markdown
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 UPLOAD_FOLDER = f"{os.getcwd()}/static/images/profile_pics/"
@@ -70,7 +70,7 @@ def list_to_html(l):
 
 def give_feedback(inputs, flags, all=False):
     """
-    Ensure correct input and give dinamic feedback 
+    Ensure correct input and give dinamic feedback
     to user when filling the registration form
     """
     feedback = {}
@@ -82,8 +82,8 @@ def give_feedback(inputs, flags, all=False):
     if 'username' in flags or all:
 
         if not inputs['username']:
-            feedback['username'] = "&#128551; Missing username &#128551;"        
-        
+            feedback['username'] = "&#128551; Missing username &#128551;"
+
         # that is, if there is no feedback for the username field yet
         if not check_key(feedback, 'username'):
             # re.findall returns a list with all matching characters
@@ -101,15 +101,15 @@ def give_feedback(inputs, flags, all=False):
 
         if not inputs['password']:
             feedback['password'] = "&#128551; Missing password &#128551;"
-        
-        if not check_key(feedback, 'password'):                
+
+        if not check_key(feedback, 'password'):
             if re.findall(r'[ ]', inputs['password']):
                 feedback['password'] = '&#129300; White spaces are not allowed &#129300;'
-    
+
         if not check_key(feedback, 'password'):
             if len(inputs['password']) < 8:
                 feedback['password'] = "&#128528; Password must be at least 8 characters long &#128528;"
-    
+
         if not check_key(feedback, 'password'):
             # these are all the required patterns in the password
             lowercase = re.findall(r"[a-z]", inputs['password'])
@@ -130,7 +130,7 @@ def give_feedback(inputs, flags, all=False):
 
         if not inputs['email']:
             feedback['email'] = '&#128551; Missing e-mail &#128551;'
-        
+
         if not check_key(feedback, 'email'):
             already_exists = cursor.execute('SELECT email FROM users WHERE email = ?', [inputs['email']]).fetchone()
             if already_exists:
@@ -138,17 +138,9 @@ def give_feedback(inputs, flags, all=False):
 
         # yes, checking the same condition again, to avoid two feedback beeing given at once
         if not check_key(feedback, 'email'):
-            is_valid = validate_email(email_address=inputs['email'],
-                                      check_format=True,
-                                      check_blacklist=True,
-                                      check_dns=True,
-                                      dns_timeout=10,
-                                      check_smtp=True,
-                                      smtp_timeout=10,
-                                      smtp_helo_host=None,
-                                      smtp_from_address=EMAIL_USERNAME,
-                                      smtp_debug=False)
-            if not is_valid:
+            valid_email = re.search(r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$', inputs['email'])
+
+            if not valid_email:
                 feedback['email'] = '&#128558; Invalid e-mail adress &#128558;'
 
     # if any of the inputs provided has not yet been added to the feedback dict,
@@ -156,6 +148,6 @@ def give_feedback(inputs, flags, all=False):
     for key in inputs:
         if not check_key(feedback, key):
             feedback[key] = '&#129303; Perfect &#129303;'
-    
-    connection.close()    
+
+    connection.close()
     return feedback
