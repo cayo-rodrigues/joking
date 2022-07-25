@@ -9,8 +9,8 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from helpers import (UPLOAD_FOLDER, allowed_file, erase_picture, find_pic,
-                     give_feedback, list_to_html, login_required)
+from .helpers import (UPLOAD_FOLDER, allowed_file, erase_picture, find_pic,
+                      give_feedback, list_to_html, login_required)
 
 app = Flask(__name__)
 
