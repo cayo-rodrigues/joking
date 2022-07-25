@@ -3,9 +3,9 @@
 {% block title %} Profile {% endblock %}
 
 {% block main %}
-<script src="/static/rate.js"></script>
-<script src="/static/comment.js"></script>
-<script src="/static/delete_post.js"></script>
+<script src="../static/rate.js"></script>
+<script src="../static/comment.js"></script>
+<script src="../static/delete_post.js"></script>
 
     <div class="sheet-like-greenish">
         <div class="sheet-like container p-5">
@@ -22,7 +22,7 @@
                 <h3 class="username">{{ username }}</h3>
                 <img class="profile_pic" src="{{ ppic }}" alt="profile_picture" type={{ type }} title="Choose a profile picture!">
             </div>
-            
+
             {% if session.user_id == user_id %}
                 <div class="hidden_form">
                     <form action="/upload_pic" method="POST" enctype="multipart/form-data">
@@ -41,7 +41,7 @@
             <hr>
             <div class="jokes">
                 <h4>
-                    My Jokes 
+                    My Jokes
                     <span class="sort_by">
                         <form id="select_sort">
                             <label for="sort_options">Sort by: </label>
@@ -95,7 +95,7 @@
                             <textarea id="comment-for-{{ row[3] }}" class="write_comment" rows="2" autofocus required></textarea><br>
                             <button name="{{ row[3] }}" class="benjamin comment-button" onclick="post_comment(this.name)">Comment</button>
                         </div>
-                        <button class="c_comments" id="c-dropdown-at-{{ row[3] }}" name="{{ row[3] }}" onclick="seeComments(this.name)">Show comments</button>                    
+                        <button class="c_comments" id="c-dropdown-at-{{ row[3] }}" name="{{ row[3] }}" onclick="seeComments(this.name)">Show comments</button>
                     </div>
                     <div class="container p-4 hidden_form comments" id="comments-at-{{ row[3] }}">
                         {% for comment in comments if comment[2] == row[3] %}
@@ -116,9 +116,9 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
-            </div>                    
+            </div>
             {% endif %}
-            
+
             {% if session.user_id == user_id %}
                 <div class="modal-footer" style="margin-top: 10px;">
                     <table>

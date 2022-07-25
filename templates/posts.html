@@ -4,13 +4,13 @@
 
 
 {% block main %}
-<script src="/static/rate.js"></script>
-<script src="/static/comment.js"></script>
-<script src="/static/delete_post.js"></script>
+<script src="../static/rate.js"></script>
+<script src="../static/comment.js"></script>
+<script src="../static/delete_post.js"></script>
 
     <div class="sheet-like-{{ messages['title'] }}">
         <div class="sheet-like container p-5">
-            
+
             {% include 'flashed_message.html' %}
 
             <div class="posts-heading"><img src="/static/images/{{ messages['img'] }}"></div>
@@ -20,7 +20,7 @@
                 {% for row in all_jokes %}
                     <hr id="hr_at_{{ row[3] }}">
                     <div id="joke_n_{{ row[3] }}" class="post">
-                        
+
                             {% for user in all_users %}
                                 {% if row[2] in user %}
                                     <a href="/profile/{{ user[1] }}"><img class="post_pic" src="{{ all_pics[user[0]] }}"></a>
@@ -37,7 +37,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                        
+
                         <pre class="joke">{{ row[0] | safe }}</pre>
                         <p>
                             <b class="rating">Rating</b>: <span id="rating_for_{{ row[3] }}">{{ row[1] }}</span>
@@ -55,9 +55,9 @@
                             <textarea id="comment-for-{{ row[3] }}" class="write_comment" rows="2" name="comment" placeholder="Feel free to use Markdown syntax" autofocus required></textarea>
                             <button name="{{ row[3] }}" class="benjamin comment-button" onclick="post_comment(this.name)">Comment</button>
                         </div>
-                        <button class="c_comments" id="c-dropdown-at-{{ row[3] }}" name="{{ row[3] }}" onclick="seeComments(this.name)">Show comments</button>                    
-                    
-                    
+                        <button class="c_comments" id="c-dropdown-at-{{ row[3] }}" name="{{ row[3] }}" onclick="seeComments(this.name)">Show comments</button>
+
+
                     </div>
                     <div class="container p-4 hidden_form comments" id="comments-at-{{ row[3] }}">
                         {% for comment in all_comments if comment[2] == row[3] %}
