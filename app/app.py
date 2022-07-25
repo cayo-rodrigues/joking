@@ -327,12 +327,10 @@ def login():
     """Log user in"""
 
     # Forget user id and any other information stored in session, but keep flashed messages
-    for key in session.keys():
-        if key != '_flashes':
-            session.pop(key)
-
-    # this would do exactly the same as the above:
-        # [session.pop(key) for key in list(session.keys()) if key != '_flashes']
+    flashes = session.pop('_flashes', None)
+    session.clear()
+    if flashes:
+        session['_flashes'] = flashes
 
     if request.method == 'POST':
 
