@@ -3,13 +3,11 @@ import re
 import sqlite3
 from functools import wraps
 
-from decouple import config
 from flask import redirect, session
 from markdown2 import markdown
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 UPLOAD_FOLDER = f"{os.getcwd()}/static/images/profile_pics/"
-EMAIL_USERNAME = config('USER')
 
 
 # From CS50 staff
