@@ -3,13 +3,12 @@ import re
 import sqlite3
 from functools import wraps
 
-from flask import redirect, session
+from flask import redirect, request, session
 from markdown2 import markdown
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 UPLOAD_FOLDER = "/static/images/profile_pics/"
 FULL_UPLOAD_FOLDER = f"{os.getcwd()}/app{UPLOAD_FOLDER}"
-
 
 # From CS50 staff
 def login_required(f):
@@ -28,13 +27,15 @@ def login_required(f):
 
 def find_pic(user_id):
     """Look for users profile pictures and return their path"""
+
     for ext in ALLOWED_EXTENSIONS:
         try:
-            with open(f'{UPLOAD_FOLDER}{user_id}.{ext}') as pic:
-                return pic.name.split('app', 1)[1]
+            with open(f"{FULL_UPLOAD_FOLDER}{user_id}.{ext}"):
+                return f"{request.host_url}{UPLOAD_FOLDER}{user_id}.{ext}"
         except FileNotFoundError:
             pass
-    return f'{UPLOAD_FOLDER}default.jpg'
+
+    return f'{request.host_url}{UPLOAD_FOLDER}default.jpg'
 
 
 def allowed_file(filename):
@@ -55,8 +56,8 @@ def check_key(dictionary, key):
 def erase_picture(picture):
     """Erase a profile picture"""
     # if user's current profile pic is not the default pic
-    if picture != f"{UPLOAD_FOLDER}default.jpg":
-        os.remove(os.path.join(UPLOAD_FOLDER, picture.split('profile_pics/', 1)[1]))
+    if picture != f'{request.host_url}{UPLOAD_FOLDER}default.jpg':
+        os.remove(os.path.join(FULL_UPLOAD_FOLDER, picture.split('profile_pics/', 1)[1]))
 
 
 def list_to_html(l):
