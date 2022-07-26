@@ -3,6 +3,7 @@ import sqlite3
 from datetime import datetime
 from tempfile import mkdtemp
 
+import dotenv
 from flask import (Flask, flash, jsonify, redirect, render_template, request,
                    session)
 from flask_session import Session
@@ -13,22 +14,19 @@ from .helpers import (FULL_UPLOAD_FOLDER, UPLOAD_FOLDER, allowed_file,
                       erase_picture, find_pic, give_feedback, list_to_html,
                       login_required)
 
+dotenv.load_dotenv('../.env')
+
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # limit uploads size to 5MB
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-
-@app.after_request
-def after_request(response):
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
 
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+
 Session(app)
 
 
@@ -36,7 +34,7 @@ Session(app)
 def index():
     try:
         return redirect(f"/profile/{session['username']}")
-    except:
+    except KeyError:
         return redirect("/login")
 
 
@@ -50,7 +48,7 @@ def profile(username):
         # check if user has changed the default jokes display order
         try:
             order = session['order']
-        except:
+        except KeyError:
             order = 'date_time'
 
         # connect to the data base
@@ -327,6 +325,7 @@ def delete_post(stuff):
 def login():
     """Log user in"""
 
+    session.clear()
     # Forget user id and any other information stored in session, but keep flashed messages
     # flashes = session.pop('_flashes', None)
     # session.clear()
