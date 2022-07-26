@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% block title %} {{messages['title']}} {% endblock %}
+{% block title %} {{title}} {% endblock %}
 
 
 {% block main %}
@@ -8,12 +8,11 @@
 <script src="../static/comment.js"></script>
 <script src="../static/delete_post.js"></script>
 
-    <div class="sheet-like-{{ messages['title'] }}">
+    <div class="sheet-like-{{ title }}">
         <div class="sheet-like container p-5">
 
             {% include 'flashed_message.html' %}
 
-            <div class="posts-heading"><img src="/static/images/{{ messages['img'] }}"></div>
             {% if not all_jokes %}
                 <p><h3>Be the first to phun things up!</h3></p>
             {% else %}

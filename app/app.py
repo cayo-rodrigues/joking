@@ -196,16 +196,10 @@ def posts(sort_order):
     # change page's title and heading according to the order of display
     if sort_order == 'newest':
         order_by = 'date_time'
-        messages = {
-            'title': 'Newest',
-            'img': 'Posts_new.png'
-        }
+        title = 'Newest'
     else:
         order_by = 'rating'
-        messages = {
-            'title': 'Phuniest',
-            'img': 'Posts_best.png'
-        }
+        title = 'Phuniest'
 
     connection = sqlite3.connect('phun.db')
     cursor = connection.cursor()
@@ -228,7 +222,7 @@ def posts(sort_order):
                            all_user_votes=all_user_votes,
                            all_pics=all_pics,
                            all_comments=list_to_html(all_comments),
-                           messages=messages)
+                           title=title)
 
 
 @app.route('/comment/<joke_id>', methods=["POST"])
@@ -348,11 +342,11 @@ def login():
             return redirect('/login')
 
         # remember which user has logged in
-        session["user_id"] = query[0]
+        session['user_id'] = query[0]
         session['username'] = query[1]
         session['email'] = query[3]
         connection.close()
-        return redirect(f"/profile/{query[1]}")
+        return redirect('/')
 
     else:
         return render_template("login.html")

@@ -7,7 +7,7 @@ body {
     /* vh stands for 'viewport height' */
     min-height: 100vh;
     background-color: white;
-    box-shadow: 0px 0px 10px black;   
+    box-shadow: 0px 0px 10px black;
 }
 .sheet-like-greenish {
     background-image: url('/static/images/bg_01.jpg');
@@ -29,7 +29,7 @@ textarea {
 /* pre blocks(jokes and comments) auto line break when in smaller screens */
 pre {
     white-space: pre-wrap;
-    /* white-space: pre-line would have the same effect, 
+    /* white-space: pre-line would have the same effect,
     but trimming white spaces at line begginings too */
 }
 
@@ -46,8 +46,7 @@ pre {
     margin-right: 10px;
 }
 .logo img {
-    width: 50px;
-    height: 30px;
+    width: 30px;
     transform: scale(1.8);
 }
 .nav-link {
@@ -84,14 +83,14 @@ form {
 .center_form {
     text-align: center;
     overflow: hidden;
-    padding: 50px 50px 70px 50px;
+    padding: 50px;
     margin: 3vh 28vw 3vh 28vw;
 }
 .center_form img {
-    margin-top: 4%;
+    margin-top: 2%;
     margin-bottom: 5%;
     width: 250px;
-    height: 150px;
+    /* height: 150px; */
 }
 .left_form {
     margin: 75px 5% 0% 5%;
@@ -320,6 +319,8 @@ input:focus {
 }
 main {
     overflow-x: hidden;
+    min-height: 100vh;
+    color: ye;
 }
 main img {
     /* Constrain images on small screens */
@@ -333,7 +334,7 @@ main img {
     }
 }
 /* when screen width is less than 600px do the following */
-@media screen and (max-width: 600px) 
+@media screen and (max-width: 600px)
 {
     .side_nav {
         border: none;
@@ -345,10 +346,10 @@ main img {
         margin-top: 5%;
     }
     .side_nav li {
-        text-align: inherit;    
+        text-align: inherit;
         font-size: medium;
     }
-    
+
     .profile_pic {
         width: 100px;
         height: 100px;
@@ -398,7 +399,7 @@ main img {
         font-size: 0.9rem;
     }
 
-    .center_form {    
+    .center_form {
         padding: 0;
         margin: 0;
         border-radius: initial;
