@@ -30,7 +30,7 @@ def find_pic(user_id):
     """Look for users profile pictures and return their path"""
     for ext in ALLOWED_EXTENSIONS:
         try:
-            with open(f'{FULL_UPLOAD_FOLDER}{user_id}.{ext}') as pic:
+            with open(f'{UPLOAD_FOLDER}{user_id}.{ext}') as pic:
                 return pic.name.split('app', 1)[1]
         except FileNotFoundError:
             pass
@@ -56,7 +56,7 @@ def erase_picture(picture):
     """Erase a profile picture"""
     # if user's current profile pic is not the default pic
     if picture != f"{UPLOAD_FOLDER}default.jpg":
-        os.remove(os.path.join(FULL_UPLOAD_FOLDER, picture.split('profile_pics/', 1)[1]))
+        os.remove(os.path.join(UPLOAD_FOLDER, picture.split('profile_pics/', 1)[1]))
 
 
 def list_to_html(l):
