@@ -28,6 +28,7 @@ pexpect==4.8.0
 platformdirs==2.2.0
 premailer==3.8.0
 ptyprocess==0.7.0
+python-dotenv==0.20.0
 python-vlc==3.0.12118
 PyYAML==5.4.1
 requests==2.25.1
