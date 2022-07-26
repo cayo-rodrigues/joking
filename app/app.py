@@ -9,8 +9,9 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from .helpers import (UPLOAD_FOLDER, allowed_file, erase_picture, find_pic,
-                      give_feedback, list_to_html, login_required)
+from .helpers import (FULL_UPLOAD_FOLDER, UPLOAD_FOLDER, allowed_file,
+                      erase_picture, find_pic, give_feedback, list_to_html,
+                      login_required)
 
 app = Flask(__name__)
 
@@ -144,7 +145,7 @@ def upload_pic():
         # erase user's former picture, if there is one
         erase_picture(find_pic(session['user_id']))
         # save new picture in the system
-        f.save(os.path.join(UPLOAD_FOLDER, f"{session['user_id']}.{ext}"))
+        f.save(os.path.join(FULL_UPLOAD_FOLDER, f"{session['user_id']}.{ext}"))
         return redirect('/')
     else:
         flash('&#128556; File type not allowed. Profile pictures must be .png, .jpg, .jpeg or .gif &#128556;', 'alert-warning')
@@ -327,10 +328,10 @@ def login():
     """Log user in"""
 
     # Forget user id and any other information stored in session, but keep flashed messages
-    flashes = session.pop('_flashes', None)
-    session.clear()
-    if flashes:
-        session['_flashes'] = flashes
+    # flashes = session.pop('_flashes', None)
+    # session.clear()
+    # if flashes:
+    #     session['_flashes'] = flashes
 
     if request.method == 'POST':
 

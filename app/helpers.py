@@ -7,7 +7,8 @@ from flask import redirect, session
 from markdown2 import markdown
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-UPLOAD_FOLDER = f"../static/images/profile_pics/"
+UPLOAD_FOLDER = "/static/images/profile_pics/"
+FULL_UPLOAD_FOLDER = f"{os.getcwd()}/app{UPLOAD_FOLDER}"
 
 
 # From CS50 staff
@@ -29,9 +30,9 @@ def find_pic(user_id):
     """Look for users profile pictures and return their path"""
     for ext in ALLOWED_EXTENSIONS:
         try:
-            with open(f'{UPLOAD_FOLDER}{user_id}.{ext}') as pic:
-                return pic.name
-        except:
+            with open(f'{FULL_UPLOAD_FOLDER}{user_id}.{ext}') as pic:
+                return pic.name.split('app', 1)[1]
+        except FileNotFoundError:
             pass
     return f'{UPLOAD_FOLDER}default.jpg'
 
@@ -54,8 +55,8 @@ def check_key(dictionary, key):
 def erase_picture(picture):
     """Erase a profile picture"""
     # if user's current profile pic is not the default pic
-    if picture != f"{UPLOAD_FOLDER.split('Phun')[1]}default.jpg":
-        os.remove(os.path.join(UPLOAD_FOLDER, picture.split('profile_pics/', 1)[1]))
+    if picture != f"{UPLOAD_FOLDER}default.jpg":
+        os.remove(os.path.join(FULL_UPLOAD_FOLDER, picture.split('profile_pics/', 1)[1]))
 
 
 def list_to_html(l):
