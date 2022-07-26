@@ -7,7 +7,7 @@ from flask import redirect, session
 from markdown2 import markdown
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-UPLOAD_FOLDER = f"./static/images/profile_pics/"
+UPLOAD_FOLDER = f"../static/images/profile_pics/"
 
 
 # From CS50 staff
@@ -30,10 +30,10 @@ def find_pic(user_id):
     for ext in ALLOWED_EXTENSIONS:
         try:
             with open(f'{UPLOAD_FOLDER}{user_id}.{ext}') as pic:
-                return pic.name.split('Phun', 1)[1]
+                return pic.name
         except:
             pass
-    return f'{UPLOAD_FOLDER}default.jpg'.split('Phun', 1)[1]
+    return f'{UPLOAD_FOLDER}default.jpg'
 
 
 def allowed_file(filename):
