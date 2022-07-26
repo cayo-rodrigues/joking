@@ -7,7 +7,7 @@ from flask import redirect, session
 from markdown2 import markdown
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-UPLOAD_FOLDER = f"{os.getcwd()}/static/images/profile_pics/"
+UPLOAD_FOLDER = f"./static/images/profile_pics/"
 
 
 # From CS50 staff
