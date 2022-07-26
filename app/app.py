@@ -1,7 +1,6 @@
 import os
 import sqlite3
 from datetime import datetime
-from tempfile import mkdtemp
 
 import dotenv
 from flask import (Flask, flash, jsonify, redirect, render_template, request,
@@ -23,8 +22,8 @@ app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # limit uploads size to 5MB
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-app.config["SESSION_FILE_DIR"] = mkdtemp()
-app.config["SESSION_PERMANENT"] = True
+app.config["SESSION_FILE_DIR"] = './sessions/'
+app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
 Session(app)
