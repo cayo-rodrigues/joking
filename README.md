@@ -26,7 +26,7 @@ Since this project is hosted by **Heroku**, and it is using `SQLite`, all new in
 
 ## Final Thoughts
 
-Yeah, if you look at the source code, you're gonna see how much it could be better. Such a poor organization, indeed, I agree. Also the commits, they're just awful, not even close to conventional commits. Maybe the database tables could be better designed in some ways too. And no doubt `app.py` and `helpers.py` modules are overloaded, they could surely be broken into smaller modules and/or packages.
+Yeah, if you look at the source code, you're gonna see how much it could be better. Such a poor organization, indeed, I agree. The commits are sometimes just shameful. Maybe the database tables could be better designed in some ways too. And no doubt `app.py` and `helpers.py` modules are overloaded, they could surely be broken into smaller modules and/or packages.
 
 But looking back, considering the amount of knowledge I had back then, and my former naiveness, this project is really a great milestone. It is my first full stack project. So I am really happy to see that it works so well, despite this little lack of good practices.
 
