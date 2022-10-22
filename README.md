@@ -2,7 +2,7 @@
 
 ### Website URL
 
-https://jo-king.herokuapp.com/
+https://joking.onrender.com/
 
 ### Video Demonstration
 
